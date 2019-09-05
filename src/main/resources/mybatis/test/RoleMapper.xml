@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zmh.stuspringbootdemo.dao.RoleMapper" >
+    <resultMap id="BaseResultMap" type="com.zmh.stuspringbootdemo.domain.Role" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="role_name" property="role_name" jdbcType="VARCHAR" />
+        <result column="user_id" property="user_id" jdbcType="INTEGER" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+    id, role_name, user_id
+  </sql>
+
+    <select id="getRole" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select
+        <include refid="Base_Column_List" />
+        from role
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <delete id="deleteRole" parameterType="java.lang.Integer" >
+    delete from role
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+
+    <insert id="addRole" parameterType="com.zmh.stuspringbootdemo.domain.Role" >
+        insert into role
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="role_name != null" >
+                role_name,
+            </if>
+            <if test="user_id != null" >
+                user_id,
+            </if>
+
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="role_name != null" >
+                #{role_name,jdbcType=VARCHAR},
+            </if>
+            <if test="user_id != null" >
+                #{user_id,jdbcType=INTEGER},
+            </if>
+
+        </trim>
+    </insert>
+
+    <update id="updatePermission" parameterType="com.zmh.stuspringbootdemo.domain.Role" >
+        update role
+        <set >
+            <if test="role_name != null" >
+                role_name = #{permission,jdbcType=VARCHAR},
+            </if>
+            <if test="user_id != null" >
+                user_id = #{user_id,jdbcType=INTEGER},
+            </if>
+
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="getRoleByUserName" parameterType="java.lang.String" resultType="com.zmh.stuspringbootdemo.domain.Role">
+        select b.id,b.role_name,b.user_id
+        from user a inner join role b on a.id=b.user_id
+        where  a.name=#{name,jdbcType=VARCHAR}
+
+    </select>
+
+
+
+</mapper>
